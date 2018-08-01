@@ -69,6 +69,8 @@ namespace Bench.RpcSlave.Worker.Operations
                         httpConnectionOptions.Transports = transportType;
                         httpConnectionOptions.CloseTimeout = TimeSpan.FromMinutes(100);
                         httpConnectionOptions.Cookies = cookies;
+                        httpConnectionOptions.SkipNegotiation =
+                            (transportType == HttpTransportType.WebSockets && _tk.BenchmarkCellConfig.SkipNegotiation);
                     });
 
                 HubConnection connection = null;

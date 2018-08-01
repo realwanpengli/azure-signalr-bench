@@ -22,7 +22,7 @@ namespace Bench.Common {
     static BenchReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgtCZW5jaC5wcm90bxIMQmVuY2guQ29tbW9uIpUCChNCZW5jaG1hcmtDZWxs",
+            "CgtCZW5jaC5wcm90bxIMQmVuY2guQ29tbW9uIq4CChNCZW5jaG1hcmtDZWxs",
             "Q29uZmlnEhMKC3NlcnZpY2VUeXBlGAEgASgJEhUKDXRyYW5zcG9ydFR5cGUY",
             "AiABKAkSEwoLaHViUHJvdG9jb2wYAyABKAkSEAoIc2NlbmFyaW8YBCABKAkS",
             "DAoEc3RlcBgFIAEoCRIUCgxtaXhHcm91cE5hbWUYBiABKAkSGQoRbWl4RWNo",
@@ -68,10 +68,11 @@ namespace Bench.Common {
             "b25SYW5nZRITLkJlbmNoLkNvbW1vbi5SYW5nZRoTLkJlbmNoLkNvbW1vbi5F",
             "bXB0eSIAEkEKEEdldENvbm5lY3Rpb25JZHMSEy5CZW5jaC5Db21tb24uRW1w",
             "dHkaFi5CZW5jaC5Db21tb24uU3RyZ0xpc3QiAGIGcHJvdG8z"));
+
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Bench.Common.BenchmarkCellConfig), global::Bench.Common.BenchmarkCellConfig.Parser, new[]{ "ServiceType", "TransportType", "HubProtocol", "Scenario", "Step", "MixGroupName", "MixEchoConnection", "MixBroadcastConnection", "MixGroupConnection", "TargetConnectionIds", "MessageSize" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Bench.Common.BenchmarkCellConfig), global::Bench.Common.BenchmarkCellConfig.Parser, new[]{ "ServiceType", "TransportType", "HubProtocol", "Scenario", "Step", "MixGroupName", "MixEchoConnection", "MixBroadcastConnection", "MixGroupConnection", "TargetConnectionIds", "MessageSize", "SkipNegotiation" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Bench.Common.ConnectionConfig), global::Bench.Common.ConnectionConfig.Parser, new[]{ "GroupName", "SendFlag" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Bench.Common.ConnectionConfigList), global::Bench.Common.ConnectionConfigList.Parser, new[]{ "Configs" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Bench.Common.Range), global::Bench.Common.Range.Parser, new[]{ "Begin", "End" }, null, null, null),
@@ -126,6 +127,7 @@ namespace Bench.Common {
       mixGroupConnection_ = other.mixGroupConnection_;
       targetConnectionIds_ = other.targetConnectionIds_.Clone();
       messageSize_ = other.messageSize_;
+      skipNegotiation_ = other.skipNegotiation_;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -253,6 +255,17 @@ namespace Bench.Common {
       }
     }
 
+    /// <summary>Field number for the "skipNegotiation" field.</summary>
+    public const int SkipNegotiationFieldNumber = 12;
+    private bool skipNegotiation_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool SkipNegotiation {
+      get { return skipNegotiation_; }
+      set {
+        skipNegotiation_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as BenchmarkCellConfig);
@@ -277,6 +290,7 @@ namespace Bench.Common {
       if (MixGroupConnection != other.MixGroupConnection) return false;
       if(!targetConnectionIds_.Equals(other.targetConnectionIds_)) return false;
       if (MessageSize != other.MessageSize) return false;
+      if (SkipNegotiation != other.SkipNegotiation) return false;
       return true;
     }
 
@@ -294,6 +308,7 @@ namespace Bench.Common {
       if (MixGroupConnection != 0) hash ^= MixGroupConnection.GetHashCode();
       hash ^= targetConnectionIds_.GetHashCode();
       if (MessageSize != 0) hash ^= MessageSize.GetHashCode();
+      if (SkipNegotiation != false) hash ^= SkipNegotiation.GetHashCode();
       return hash;
     }
 
@@ -345,6 +360,10 @@ namespace Bench.Common {
         output.WriteRawTag(88);
         output.WriteInt32(MessageSize);
       }
+      if (SkipNegotiation != false) {
+        output.WriteRawTag(96);
+        output.WriteBool(SkipNegotiation);
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -380,6 +399,9 @@ namespace Bench.Common {
       size += targetConnectionIds_.CalculateSize(_repeated_targetConnectionIds_codec);
       if (MessageSize != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(MessageSize);
+      }
+      if (SkipNegotiation != false) {
+        size += 1 + 1;
       }
       return size;
     }
@@ -419,6 +441,9 @@ namespace Bench.Common {
       targetConnectionIds_.Add(other.targetConnectionIds_);
       if (other.MessageSize != 0) {
         MessageSize = other.MessageSize;
+      }
+      if (other.SkipNegotiation != false) {
+        SkipNegotiation = other.SkipNegotiation;
       }
     }
 
@@ -472,6 +497,10 @@ namespace Bench.Common {
           }
           case 88: {
             MessageSize = input.ReadInt32();
+            break;
+          }
+          case 96: {
+            SkipNegotiation = input.ReadBool();
             break;
           }
         }
@@ -1430,7 +1459,11 @@ namespace Bench.Common {
     public const int IntervalFieldNumber = 4;
     private int interval_;
     /// <summary>
+<<<<<<< HEAD
     /// int32 slaves = 3;
+=======
+    /// int32 slaves = 3;
+>>>>>>> df58725... allow skip negotiation for websockets
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Interval {

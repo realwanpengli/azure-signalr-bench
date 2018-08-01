@@ -29,6 +29,7 @@ message BenchmarkCellConfig {
 	int32 mixGroupConnection = 9;
 	repeated string targetConnectionIds = 10;
 	int32 messageSize = 11;
+	bool skipNegotiation = 12;
 }
 
 message ConnectionConfig {

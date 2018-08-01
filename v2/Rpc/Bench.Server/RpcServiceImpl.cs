@@ -45,12 +45,11 @@ namespace Bench.RpcSlave
                 var jobConfig = new JobConfig
                 {
                     Connections = config.Connections,
-                        ConcurrentConnections = config.ConcurrentConnections,
-                        // Slaves = config.Slaves,
-                        Interval = config.Interval,
-                        Duration = config.Duration,
-                        ServerUrl = config.ServerUrl,
-                        Pipeline = new List<string>(config.Pipeline.Split(';'))
+                    ConcurrentConnections = config.ConcurrentConnections,
+                    Interval = config.Interval,
+                    Duration = config.Duration,
+                    ServerUrl = config.ServerUrl,
+                    Pipeline = new List<string>(config.Pipeline.Split(';'))
                 };
 
                 // TODO: handle exception
@@ -101,8 +100,10 @@ namespace Bench.RpcSlave
                     return Task.FromResult(dict);
                 }
 
-                var list = _sigWorker.GetCounters();
-                list.ForEach(pair => dict.Pairs.Add(new Pair { Key = pair.Item1, Value = pair.Item2 }));
+                _sigWorker.PushCounters((item1, item2) =>
+                {
+                    dict.Pairs.Add(new Pair { Key = item1, Value = item2 });
+                });
                 return Task.FromResult(dict);
             }
             catch (Exception ex)

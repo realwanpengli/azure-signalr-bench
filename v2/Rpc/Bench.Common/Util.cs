@@ -52,7 +52,8 @@ namespace Bench.Common
 
         public static long Timestamp()
         {
-            var unixDateTime = (long) (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalMilliseconds;
+            var unixDateTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();//(long)(DateTime.UtcNow.);
+            //var unixDateTime = (long) (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalMilliseconds;
             return unixDateTime;
         }
 

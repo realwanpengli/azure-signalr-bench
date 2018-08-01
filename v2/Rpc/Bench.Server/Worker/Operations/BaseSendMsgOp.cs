@@ -110,7 +110,7 @@ namespace Bench.RpcSlave.Worker.Operations
 
         private async Task StartSendingMessageAsync(HubConnection connection, int ind)
         {
-            await Task.Delay(StartTimeOffsetGenerator.Delay(TimeSpan.FromSeconds(_tk.JobConfig.Interval)));
+            //await Task.Delay(StartTimeOffsetGenerator.Delay(TimeSpan.FromSeconds(_tk.JobConfig.Interval)));
             using(var cts = new CancellationTokenSource(TimeSpan.FromSeconds(_tk.JobConfig.Duration)))
             {
                 while (!cts.IsCancellationRequested)
@@ -139,7 +139,6 @@ namespace Bench.RpcSlave.Worker.Operations
                                 _brokenConnectionInds[ind] = true;
                             }
                         });
-
                     }
                     else
                     {

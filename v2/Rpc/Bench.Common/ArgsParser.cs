@@ -105,5 +105,8 @@ namespace Bench.Common
 
         [Option("messageSize", Default="0", Required = false, HelpText = "")]
         public string MessageSize { get; set; }
+
+        [Option("skipNegotiation", Default="false", Required = false, HelpText = "")]
+        public string SkipNegotiation { get; set; }
     }
 }

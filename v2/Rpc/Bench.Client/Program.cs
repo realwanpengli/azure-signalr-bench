@@ -260,7 +260,8 @@ namespace Bench.RpcMaster
                             MixBroadcastConnection = mixBroadcastConn,
                             MixGroupName = argsOption.MixGroupName,
                             MixGroupConnection = mixGroupConn,
-                            MessageSize = messageSize
+                            MessageSize = messageSize,
+                            SkipNegotiation = Boolean.Parse(argsOption.SkipNegotiation)
                         };
 
                         benchmarkCellConfig.TargetConnectionIds.AddRange(connectionIds);

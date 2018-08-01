@@ -23,18 +23,15 @@ namespace Bench.RpcSlave.Worker.Counters
             ResetCounters();
         }
 
-        public List<Tuple<string, double>> GetAll()
+        public void PushAll(Action<string, int> handler)
         {
-            var list = new List<Tuple<string, double>>();
-            lock(InnerCounters)
+            lock (InnerCounters)
             {
                 foreach (var counter in InnerCounters)
                 {
-                    list.Add(new Tuple<string, double>(counter.Key, counter.Value));
+                    handler(counter.Key, counter.Value);
                 }
             }
-
-            return list;
         }
 
         public void ResetCounters(bool withConnection = true)
