@@ -123,7 +123,7 @@ namespace Bench.RpcSlave.Worker.Operations
             {
                 var callbackName = "SendGroup";
 
-                _tk.Connections[i].On (callbackName, (int count, string time) =>
+                _tk.Connections[i].On (callbackName, (ulong count, string time) =>
                 {
                     var receiveTimestamp = Util.Timestamp ();
                     var sendTimestamp = Convert.ToInt64 (time);

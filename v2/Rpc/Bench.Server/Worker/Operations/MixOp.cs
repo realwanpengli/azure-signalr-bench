@@ -155,7 +155,7 @@ namespace Bench.RpcSlave.Worker.Operations
                     var sendTimestamp = Convert.ToInt64(time);
 
                     _tk.Counters.CountLatency(sendTimestamp, receiveTimestamp);
-                    _tk.Counters.SetServerCounter(count);
+                    _tk.Counters.SetServerCounter((ulong)count);
                 });
             }
         }

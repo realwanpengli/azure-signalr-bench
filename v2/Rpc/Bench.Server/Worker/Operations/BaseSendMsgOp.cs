@@ -70,13 +70,13 @@ namespace Bench.RpcSlave.Worker.Operations
 
                 if (!_tk.Init)
                     _tk.Connections[i - _tk.ConnectionRange.Begin].On(_tk.BenchmarkCellConfig.Scenario,
-                        (ulong count, string time, string thisId, string targetId, byte[] messageBlob) =>
+                        (int count, string time, string thisId, string targetId, byte[] messageBlob) =>
                         {
                             var receiveTimestamp = Util.Timestamp();
                             var sendTimestamp = Convert.ToInt64(time);
                             var receiveSize = (ulong)(messageBlob != null ? messageBlob.Length * sizeof(byte) : 0);
                             _tk.Counters.CountLatency(sendTimestamp, receiveTimestamp);
-                            _tk.Counters.SetServerCounter(count);
+                            _tk.Counters.SetServerCounter((ulong)count);
                             _tk.Counters.IncreaseReceivedMessageSize(receiveSize);
                         });
             }
