@@ -131,7 +131,6 @@ namespace Bench.RpcSlave.Worker.Operations
                                 _tk.Counters.IncreaseSentMessageSize(messageBlob.Length * sizeof(byte));
                                 _sentMessages[ind]++;
                                 _tk.Counters.IncreseSentMsg();
-
                             }
                             catch
                             {

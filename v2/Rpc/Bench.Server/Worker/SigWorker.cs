@@ -53,7 +53,7 @@ namespace Bench.RpcSlave.Worker
             return _tk.JobConfig.Pipeline;
         }
 
-        public void PushCounters(Action<string, int> handler)
+        public void PushCounters(Action<string, double> handler)
         {
             _tk.Counters.PushAll(handler);
         }

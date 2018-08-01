@@ -23,7 +23,7 @@ namespace Bench.RpcSlave.Worker.Counters
             ResetCounters();
         }
 
-        public void PushAll(Action<string, int> handler)
+        public void PushAll(Action<string, double> handler)
         {
             lock (InnerCounters)
             {
