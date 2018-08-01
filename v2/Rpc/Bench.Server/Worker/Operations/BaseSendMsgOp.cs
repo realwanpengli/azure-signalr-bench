@@ -70,11 +70,11 @@ namespace Bench.RpcSlave.Worker.Operations
 
                 if (!_tk.Init)
                     _tk.Connections[i - _tk.ConnectionRange.Begin].On(_tk.BenchmarkCellConfig.Scenario,
-                        (int count, string time, string thisId, string targetId, byte[] messageBlob) =>
+                        (ulong count, string time, string thisId, string targetId, byte[] messageBlob) =>
                         {
                             var receiveTimestamp = Util.Timestamp();
                             var sendTimestamp = Convert.ToInt64(time);
-                            var receiveSize = messageBlob != null ? messageBlob.Length * sizeof(byte) : 0;
+                            var receiveSize = (ulong)(messageBlob != null ? messageBlob.Length * sizeof(byte) : 0);
                             _tk.Counters.CountLatency(sendTimestamp, receiveTimestamp);
                             _tk.Counters.SetServerCounter(count);
                             _tk.Counters.IncreaseReceivedMessageSize(receiveSize);
@@ -111,11 +111,11 @@ namespace Bench.RpcSlave.Worker.Operations
         {
             var id = $"{Util.GuidEncoder.Encode(Guid.NewGuid())}";
             byte[] messageBlob = null;
-            var blobSize = 0;
+            ulong blobSize = 0;
             if (_tk.BenchmarkCellConfig.MessageSize != 0)
             {
                 messageBlob = new byte[_tk.BenchmarkCellConfig.MessageSize];
-                blobSize = messageBlob.Length * sizeof(byte);
+                blobSize = (ulong)(messageBlob.Length * sizeof(byte));
             }
             await Task.Delay(StartTimeOffsetGenerator.Delay(TimeSpan.FromSeconds(_tk.JobConfig.Interval)));
             using(var cts = new CancellationTokenSource(TimeSpan.FromSeconds(_tk.JobConfig.Duration)))
