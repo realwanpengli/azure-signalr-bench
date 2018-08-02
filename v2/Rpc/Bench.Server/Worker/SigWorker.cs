@@ -53,9 +53,9 @@ namespace Bench.RpcSlave.Worker
             return _tk.JobConfig.Pipeline;
         }
 
-        public List<Tuple<string, ulong>> GetCounters()
+        public void PushCounters(Action<string, ulong> handler)
         {
-            return _tk.Counters.GetAll();
+            _tk.Counters.PushAll(handler);
         }
 
         public void UpdateState(Stat.Types.State state)

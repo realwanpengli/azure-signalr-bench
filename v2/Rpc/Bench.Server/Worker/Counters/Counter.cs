@@ -10,11 +10,11 @@ namespace Bench.RpcSlave.Worker.Counters
     public class Counter
     {
         private ConcurrentDictionary<string, ulong> InnerCounters { get; set; }
-        public int LatencyStep { get; set; }
-        public int LatencyLength { get; set; }
+        public ulong LatencyStep { get; set; }
+        public ulong LatencyLength { get; set; }
         private ISaver _counterSaver;
 
-        public Counter(ISaver saver, int latencyStep = 100, int latencyLength = 10)
+        public Counter(ISaver saver, ulong latencyStep = 100, ulong latencyLength = 10)
         {
             LatencyStep = latencyStep;
             LatencyLength = latencyLength;
@@ -23,25 +23,22 @@ namespace Bench.RpcSlave.Worker.Counters
             ResetCounters();
         }
 
-        public List<Tuple<string, ulong>> GetAll()
+        public void PushAll(Action<string, ulong> handler)
         {
-            var list = new List<Tuple<string, ulong>>();
-            lock(InnerCounters)
+            lock (InnerCounters)
             {
                 foreach (var counter in InnerCounters)
                 {
-                    list.Add(new Tuple<string, ulong>(counter.Key, counter.Value));
+                    handler(counter.Key, counter.Value);
                 }
             }
-
-            return list;
         }
 
         public void ResetCounters(bool withConnection = true)
         {
 
             // messages
-            for (int i = 1; i <= LatencyLength; i++)
+            for (ulong i = 1; i <= LatencyLength; i++)
             {
                 InnerCounters.AddOrUpdate(MsgKey(i * LatencyStep), 0, (k, v) => 0);
             }
@@ -81,16 +78,15 @@ namespace Bench.RpcSlave.Worker.Counters
         public void CountLatency(long sendTimestamp, long receiveTimestamp)
         {
             long dTime = receiveTimestamp - sendTimestamp;
-            for (int j = 1; j <= LatencyLength; j++)
+            var i = (ulong)dTime / LatencyStep;
+            if (i >= LatencyLength)
             {
-                if (dTime < j * LatencyStep)
-                {
-                    InnerCounters.AddOrUpdate(MsgKey(j * LatencyStep), 0, (k, v) => v + 1);
-                    return;
-                }
+                InnerCounters.AddOrUpdate($"message:ge:{LatencyLength * LatencyStep}", 0, (k, v) => v + 1);
             }
-
-            InnerCounters.AddOrUpdate($"message:ge:{LatencyLength * LatencyStep}", 0, (k, v) => v + 1);
+            else
+            {
+                InnerCounters.AddOrUpdate(MsgKey((i+1) * LatencyStep), 0, (k, v) => v + 1);
+            }
         }
 
         public void IncreaseSentMessageSize(ulong size)
@@ -133,7 +129,7 @@ namespace Bench.RpcSlave.Worker.Counters
             InnerCounters.AddOrUpdate("server:received", count, (k, v) => Math.Max(count, v));
         }
 
-        private string MsgKey(int latency)
+        private string MsgKey(ulong latency)
         {
             return $"message:lt:{latency}";
         }
