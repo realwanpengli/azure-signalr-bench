@@ -66,19 +66,6 @@ namespace Bench.Common.Config
 
         public ConnectionConfigList UpdateSendConn(ConnectionConfigList configs, int more, int totalConnection, int slaveCnt)
         {
-            // var curMores = new List<int>();
-            // for (int i = 0; i < slaveCnt; i++)
-            // {
-            //     var curMore = Util.SplitNumber(more, i, slaveCnt);
-            //     curMores.Add(curMore);
-            // }
-            // curMores.Shuffle();
-            if (more % slaveCnt != 0 || totalConnection % slaveCnt != 0)
-            {
-                Util.Log($"more % slaveCnt != 0 || totalConnection % slaveCnt != 0");
-                throw new Exception();
-            }
-
             var beg = 0;
             for (var i = 0; i < slaveCnt; i++)
             {
