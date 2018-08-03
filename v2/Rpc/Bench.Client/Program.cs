@@ -310,7 +310,7 @@ namespace Bench.RpcMaster
                 {
                     return;
                 }
-
+                swCollect.Reset();
                 var jobj = new JObject();
                 var received = (ulong) 0;
                 foreach (var item in allClientCounters)
@@ -330,7 +330,8 @@ namespace Bench.RpcMaster
                 string onelineRecord = Regex.Replace(finalRec.ToString(), @"\s+", "");
                 onelineRecord = Regex.Replace(onelineRecord, @"\t|\n|\r", "");
                 onelineRecord += "," + Environment.NewLine;
-                Util.Log("per second: " + onelineRecord);
+                swCollect.Stop();
+                Util.Log($"{swCollect.Elapsed.TotalMilliseconds} ms: " + onelineRecord);
 
                 try
                 {
