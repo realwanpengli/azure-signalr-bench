@@ -110,9 +110,12 @@ namespace Bench.RpcSlave
                 {
                     return Task.FromResult(dict);
                 }
-
+                var swGetCounters = new Stopwatch();
+                swGetCounters.Start();
                 var list = _sigWorker.GetCounters();
                 list.ForEach(pair => dict.Pairs.Add(new Pair { Key = pair.Item1, Value = pair.Item2 }));
+                swGetCounters.Stop();
+                Util.Log($"collect counters: {swGetCounters.Elapsed.TotalMilliseconds} ms");
                 return Task.FromResult(dict);
             }
             catch (Exception ex)
