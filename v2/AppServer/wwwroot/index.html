@@ -113,13 +113,26 @@
                     messageBox.appendChild(messageEntry);
                     messageBox.scrollTop = messageBox.scrollHeight;
                 };
+                var connectionIdCallback = function (connectionId) {
+                    if (!connectionId) return;
+                    // Html encode display name and message.
+                    var connectionIdMsg = "ConnectionId: " + connectionId;
+                    var encodedName = name;
+                    var encodedMsg = connectionIdMsg.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                    var messageEntry = createMessageEntry(encodedName, encodedMsg);
+
+                    var messageBox = document.getElementById('messages');
+                    messageBox.appendChild(messageEntry);
+                    messageBox.scrollTop = messageBox.scrollHeight;
+                }
                 // Create a function that the hub can call to broadcast messages.
                 connection.on('broadcastMessage', messageCallback);
                 connection.on('echo', messageCallback);
                 connection.on('SendToGroup', messageCallback);
                 connection.on('JoinGroup', messageCallback);
                 connection.on('LeaveGroup', messageCallback);
-                connection.on('connectionId', messageCallback);
+                connection.on('connectionId', connectionIdCallback);
+                connection.on('sendToClient', messageCallback);
                 connection.onclose(onConnectionError);
             }
 
@@ -186,7 +199,7 @@
                 document.getElementById('sendToClient').addEventListener('click', function (event) {
                     connectionId = document.getElementById('connectionId');
                     if (connectionId.value && messageInput.value) {
-                        connection.send('SendToClient', connectionId.value, messageInput.value);
+                        connection.send('SendToClient', connectionId.value, messageInput.value, "");
                     }
                     // Clear text box and reset focus for next comment.
                     connectionId.value = '';
@@ -207,7 +220,7 @@
 
             var connection = new signalR.HubConnectionBuilder()
                         .withUrl('/signalrbench')
-			.withHubProtocol(new signalR.protocols.msgpack.MessagePackHubProtocol())
+			//.withHubProtocol(new signalR.protocols.msgpack.MessagePackHubProtocol())
                         .build();
             bindConnectionMessage(connection);
             connection.start()
