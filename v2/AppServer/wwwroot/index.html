@@ -21,6 +21,12 @@
         <div style="overflow: auto; border-style: ridge; border-top-style: hidden;">
             <button class="btn-warning pull-right" id="echo">Echo</button>
             <button class="btn-success pull-right" id="sendmessage">Send</button>
+            <button class="btn-success pull-right" id="sendToClient">SendToConnection</button>
+        </div>
+        <div style="width: 100%; border-left-style: ridge; border-right-style: ridge;">
+            <textarea id="connectionId"
+                      style="width: 100%; padding: 5px 10px; border-style: hidden;"
+                      placeholder="Type connectionId ..."></textarea>
         </div>
         <div style="width: 100%; border-left-style: ridge; border-right-style: ridge;">
             <textarea id="groupName"
@@ -113,12 +119,14 @@
                 connection.on('SendToGroup', messageCallback);
                 connection.on('JoinGroup', messageCallback);
                 connection.on('LeaveGroup', messageCallback);
+                connection.on('connectionId', messageCallback);
                 connection.onclose(onConnectionError);
             }
 
             function onConnected(connection) {
                 console.log('connection started');
                 connection.invoke('broadcastMessage', '_SYSTEM_', username + ' JOINED');
+                connection.invoke('ConnectionId');
                 document.getElementById('sendmessage').addEventListener('click', function (event) {
                     // Call the broadcastMessage method on the hub.
                     if (messageInput.value) {
@@ -171,6 +179,17 @@
                     }
                     // Clear text box and reset focus for next comment.
                     groupName.value = '';
+                    messageInput.value = '';
+                    messageInput.focus();
+                    event.preventDefault();
+                });
+                document.getElementById('sendToClient').addEventListener('click', function (event) {
+                    connectionId = document.getElementById('connectionId');
+                    if (connectionId.value && messageInput.value) {
+                        connection.send('SendToClient', connectionId.value, messageInput.value);
+                    }
+                    // Clear text box and reset focus for next comment.
+                    connectionId.value = '';
                     messageInput.value = '';
                     messageInput.focus();
                     event.preventDefault();
